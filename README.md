@@ -19,17 +19,22 @@ FitMeal is a full-stack **MERN-based nutrition tracking application** that helps
 
 ## Tech Stack
 
-**Frontend**
+Frontend
 - React.js
 - Tailwind CSS
 
-**Backend**
+Backend
 - Node.js
 - Express.js
 
-**Database**
+Database
 - MongoDB
 
-**Version Control**
+Version Control
 - Git & GitHub
+
+👤 Author
+
+Om Masal
+
 
