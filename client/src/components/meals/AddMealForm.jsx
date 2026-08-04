@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { addMeal } from "../../services/mealService";
+import {
+  addMeal,
+  updateMeal,
+} from "../../services/mealService";
 
-function AddMealForm({ onMealAdded }) {
+function AddMealForm({
+  editingMeal,
+  setEditingMeal,
+  fetchMeals,
+}) {
   const [form, setForm] = useState({
     mealType: "Breakfast",
     foodName: "",
@@ -12,6 +19,19 @@ function AddMealForm({ onMealAdded }) {
     fat: "",
   });
 
+  useEffect(() => {
+  if (editingMeal) {
+    setForm({
+      mealType: editingMeal.mealType,
+      foodName: editingMeal.foodName,
+      calories: editingMeal.calories,
+      protein: editingMeal.protein,
+      carbs: editingMeal.carbs,
+      fat: editingMeal.fat,
+    });
+  }
+}, [editingMeal]);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -20,29 +40,35 @@ function AddMealForm({ onMealAdded }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
+  try {
+    if (editingMeal) {
+      await updateMeal(editingMeal._id, form);
+
+      toast.success("Meal updated!");
+
+      setEditingMeal(null);
+    } else {
       await addMeal(form);
 
-      toast.success("Meal Added!");
-      onMealAdded();
-
-      setForm({
-        mealType: "Breakfast",
-        foodName: "",
-        calories: "",
-        protein: "",
-        carbs: "",
-        fat: "",
-      });
-
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Failed to add meal"
-      );
+      toast.success("Meal added!");
     }
-  };
+
+    setForm({
+      mealType: "Breakfast",
+      foodName: "",
+      calories: "",
+      protein: "",
+      carbs: "",
+      fat: "",
+    });
+
+    fetchMeals();
+  } catch (error) {
+    toast.error("Something went wrong");
+  }
+};
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow">
@@ -114,7 +140,7 @@ function AddMealForm({ onMealAdded }) {
         <button
           className="rounded-lg bg-green-600 py-3 text-white hover:bg-green-700"
         >
-          Add Meal
+          {editingMeal ? "Update Meal" : "Add Meal"}
         </button>
 
       </form>

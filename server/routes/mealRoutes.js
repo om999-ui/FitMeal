@@ -4,10 +4,12 @@ const {
   addMeal,
   getMeals,
   deleteMeal,
+  updateMeal,
 } = require("../controllers/mealController");
 
 const router = express.Router();
 router.post("/", protect, addMeal);
 router.get("/", protect, getMeals);
 router.delete("/:id", protect, deleteMeal);
+router.put("/:id", protect, updateMeal);
 module.exports = router;

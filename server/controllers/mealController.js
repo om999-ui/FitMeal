@@ -77,8 +77,44 @@ const deleteMeal = async (req, res) => {
   }
 };
 
+// Update Meal
+const updateMeal = async (req, res) => {
+  try {
+    const meal = await Meal.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        user: req.user._id,
+      },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!meal) {
+      return res.status(404).json({
+        success: false,
+        message: "Meal not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Meal updated successfully",
+      meal,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
 module.exports = {
   addMeal,
   getMeals,
    deleteMeal,
+   updateMeal,
 };
