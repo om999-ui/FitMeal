@@ -1,13 +1,17 @@
+import { Flame } from "lucide-react";
+
 function ProgressCard({
   title,
   current,
   target,
   color = "green",
 }) {
-  const percentage = Math.min(
-    (current / target) * 100,
-    100
-  );
+  const percentage =
+    target > 0
+      ? Math.min((current / target) * 100, 100)
+      : 0;
+
+  const remaining = Math.max(target - current, 0);
 
   const colors = {
     green: "bg-green-500",
@@ -17,29 +21,64 @@ function ProgressCard({
   };
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
-      <div className="flex justify-between">
-        <h3 className="text-lg font-semibold">
-          {title}
-        </h3>
+    <div className="rounded-3xl bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
 
-        <span className="text-sm text-slate-500">
-          {current}/{target}
-        </span>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            {title}
+          </p>
+
+          <h2 className="mt-3 text-4xl font-bold text-slate-800">
+            {current}
+            <span className="ml-2 text-xl font-medium text-slate-500">
+              / {target} kcal
+            </span>
+          </h2>
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-green-600">
+          <Flame size={30} />
+        </div>
+
       </div>
 
-      <div className="mt-5 h-3 w-full rounded-full bg-slate-200">
-        <div
-          className={`h-3 rounded-full ${colors[color]}`}
-          style={{
-            width: `${percentage}%`,
-          }}
-        />
+      {/* Progress Bar */}
+      <div className="mt-8">
+
+        <div className="mb-2 flex justify-between text-sm text-slate-500">
+          <span>Progress</span>
+          <span>{percentage.toFixed(0)}%</span>
+        </div>
+
+        <div className="h-4 w-full overflow-hidden rounded-full bg-slate-200">
+
+          <div
+            className={`h-4 rounded-full transition-all duration-700 ${colors[color]}`}
+            style={{
+              width: `${percentage}%`,
+            }}
+          />
+
+        </div>
+
       </div>
 
-      <p className="mt-4 text-sm text-slate-500">
-        {target - current} remaining
-      </p>
+      {/* Footer */}
+      <div className="mt-6 flex items-center justify-between">
+
+        <p className="text-sm text-slate-500">
+          Remaining Today
+        </p>
+
+        <p className="text-lg font-bold text-slate-700">
+          {remaining} kcal
+        </p>
+
+      </div>
+
     </div>
   );
 }

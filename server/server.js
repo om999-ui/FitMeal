@@ -5,9 +5,11 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const authRoutes = require("./routes/authRoutes");
+const goalRoutes = require("./routes/goalRoutes");
 
 const connectDB = require("./config/db");
 const mealRoutes = require("./routes/mealRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 
@@ -21,7 +23,9 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/goals", goalRoutes);
 app.use("/api/meals", mealRoutes);
+app.use("/api/profile", profileRoutes);
 // Test Route
 app.get("/", (req, res) => {
   res.status(200).json({

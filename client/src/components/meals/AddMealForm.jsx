@@ -20,17 +20,17 @@ function AddMealForm({
   });
 
   useEffect(() => {
-  if (editingMeal) {
-    setForm({
-      mealType: editingMeal.mealType,
-      foodName: editingMeal.foodName,
-      calories: editingMeal.calories,
-      protein: editingMeal.protein,
-      carbs: editingMeal.carbs,
-      fat: editingMeal.fat,
-    });
-  }
-}, [editingMeal]);
+    if (editingMeal) {
+      setForm({
+        mealType: editingMeal.mealType,
+        foodName: editingMeal.foodName,
+        calories: editingMeal.calories,
+        protein: editingMeal.protein,
+        carbs: editingMeal.carbs,
+        fat: editingMeal.fat,
+      });
+    }
+  }, [editingMeal]);
 
   const handleChange = (e) => {
     setForm({
@@ -40,52 +40,53 @@ function AddMealForm({
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    if (editingMeal) {
-      await updateMeal(editingMeal._id, form);
+    try {
+      if (editingMeal) {
+        await updateMeal(editingMeal._id, form);
 
-      toast.success("Meal updated!");
+        toast.success("Meal updated!");
 
-      setEditingMeal(null);
-    } else {
-      await addMeal(form);
+        setEditingMeal(null);
+      } else {
+        await addMeal(form);
 
-      toast.success("Meal added!");
+        toast.success("Meal added!");
+      }
+
+      setForm({
+        mealType: "Breakfast",
+        foodName: "",
+        calories: "",
+        protein: "",
+        carbs: "",
+        fat: "",
+      });
+
+      fetchMeals();
+    } catch (error) {
+      toast.error("Something went wrong");
     }
-
-    setForm({
-      mealType: "Breakfast",
-      foodName: "",
-      calories: "",
-      protein: "",
-      carbs: "",
-      fat: "",
-    });
-
-    fetchMeals();
-  } catch (error) {
-    toast.error("Something went wrong");
-  }
-};
+  };
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow">
-      <h2 className="mb-6 text-2xl font-bold">
-        Add Meal
+    <div className="rounded-3xl bg-white p-5 shadow-sm md:p-8">
+
+      <h2 className="mb-6 text-2xl font-bold text-slate-800">
+        {editingMeal ? "Edit Meal" : "Add Meal"}
       </h2>
 
       <form
         onSubmit={handleSubmit}
-        className="grid gap-4"
+        className="space-y-5"
       >
 
         <select
           name="mealType"
           value={form.mealType}
           onChange={handleChange}
-          className="rounded-lg border p-3"
+          className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-green-500"
         >
           <option>Breakfast</option>
           <option>Lunch</option>
@@ -98,52 +99,57 @@ function AddMealForm({
           placeholder="Food Name"
           value={form.foodName}
           onChange={handleChange}
-          className="rounded-lg border p-3"
+          className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-green-500"
         />
 
-        <input
-          name="calories"
-          type="number"
-          placeholder="Calories"
-          value={form.calories}
-          onChange={handleChange}
-          className="rounded-lg border p-3"
-        />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-        <input
-          name="protein"
-          type="number"
-          placeholder="Protein"
-          value={form.protein}
-          onChange={handleChange}
-          className="rounded-lg border p-3"
-        />
+          <input
+            name="calories"
+            type="number"
+            placeholder="Calories"
+            value={form.calories}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-green-500"
+          />
 
-        <input
-          name="carbs"
-          type="number"
-          placeholder="Carbs"
-          value={form.carbs}
-          onChange={handleChange}
-          className="rounded-lg border p-3"
-        />
+          <input
+            name="protein"
+            type="number"
+            placeholder="Protein (g)"
+            value={form.protein}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-green-500"
+          />
 
-        <input
-          name="fat"
-          type="number"
-          placeholder="Fat"
-          value={form.fat}
-          onChange={handleChange}
-          className="rounded-lg border p-3"
-        />
+          <input
+            name="carbs"
+            type="number"
+            placeholder="Carbs (g)"
+            value={form.carbs}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-green-500"
+          />
+
+          <input
+            name="fat"
+            type="number"
+            placeholder="Fat (g)"
+            value={form.fat}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-green-500"
+          />
+
+        </div>
 
         <button
-          className="rounded-lg bg-green-600 py-3 text-white hover:bg-green-700"
+          className="w-full rounded-xl bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700"
         >
           {editingMeal ? "Update Meal" : "Add Meal"}
         </button>
 
       </form>
+
     </div>
   );
 }
